@@ -18,17 +18,15 @@ from Modules import iplists
 from Modules import phishtank
 #from Modules import TitleOpen
 from datetime import datetime, date
-'''
-# wsl - no need
-try:
+
+# detect platform
+if os.name != 'posix':
     import win32com.client
-except:
-    print('Cant install Win32com package')
-'''
+
 versionNo = '1.3.2'
 
 try:
-    f = open("/opt/Sooty/config.yaml", "r")
+    f = open("/opt/Sooty/config.yaml", "r") # my files are in opt - if run from current folder, remove path before config.yaml
     configvars = strictyaml.load(f.read())
     f.close()
 except FileNotFoundError:
@@ -54,8 +52,6 @@ def switchMenu(choice):
         phishingMenu()
     if choice == '7':
         urlscanio()
-    if choice == '9':
-        extrasMenu()
     if choice == '0':
         exit()
     else:
@@ -118,20 +114,6 @@ def phishingSwitch(choice):
     else:
         mainMenu()
 
-def extrasSwitch(choice):
-    if choice == '1':
-        aboutSooty()
-    if choice == '2':
-        contributors()
-    if choice == '3':
-        extrasVersion()
-    if choice == '4':
-        wikiLink()
-    if choice == '5':
-        ghLink()
-    else:
-        mainMenu()
-
 def decodev1(rewrittenurl):
     match = re.search(r'u=(.+?)&k=', rewrittenurl)
     if match:
@@ -154,15 +136,9 @@ def decodev2(rewrittenurl):
         if url not in linksFoundList:
             linksFoundList.append(url)
 
-#def titleLogo():
-#    TitleOpen.titleOpen()
-#    os.system('cls||clear')
-
 def mainMenu():
     try:
-        print("\n --------------------------------- ")
-        print("\n           S  O  O  T  Y           ")
-        print("\n --------------------------------- ")
+        print("\n")
         print(" What would you like to do? ")
         print("\n OPTION 1: Sanitise URL For emails ")
         print(" OPTION 2: Decoders (PP, URL, SafeLinks) ")
@@ -171,7 +147,6 @@ def mainMenu():
         print(" OPTION 5: Hashing Function")
         print(" OPTION 6: Phishing Analysis")
         print(" OPTION 7: URL scan")
-        print(" OPTION 9: Extras")
         print(" OPTION 0: Exit Tool")
         switchMenu(input())
     except KeyboardInterrupt:
@@ -1031,52 +1006,6 @@ def phishtankModule():
     else:
         print("Missing configuration for phishtank in the config.yaml file.")
 
-def extrasMenu():
-    print("\n --------------------------------- ")
-    print("            E X T R A S            ")
-    print(" --------------------------------- ")
-    print(" What would you like to do? ")
-    print(" OPTION 1: About SOOTY ")
-    print(" OPTION 2: Contributors ")
-    print(" OPTION 3: Version")
-    print(" OPTION 4: Wiki")
-    print(" OPTION 5: GitHub Repo")
-    print(" OPTION 0: Exit to Main Menu")
-    extrasSwitch(input())
-
-def aboutSooty():
-    print(' SOOTY is a tool developed and targeted to help automate some tasks that SOC Analysts perform.')
-    extrasMenu()
-
-def contributors():
-    print(' CONTRIBUTORS')
-    print(" Aaron J Copley for his code to decode ProofPoint URL's")
-    print(" James Duarte for adding a hash and auto-check option to the hashing function ")
-    print(" mrpnkt for adding the missing whois requirement to requirements.txt")
-    print(" Gurulhu for adding the Base64 Decoder to the Decoders menu.")
-    print(" AndThenEnteredAlex for adding the URLScan Function from URLScan.io")
-    print(" Eric Kelson for fixing pywin32 requirement not necessary on Linux systems in requirements.txt.")
-    print(" Jenetiks for removing and tidying up duplicate imports that had accumulated over time.")
-    print(" Nikosch86 for fixing an issue with Hexdigest not storing hashes correctly")
-    print(" Naveci for numerous bug fixes, QoL improvements, and Cisco Password 7 Decoding, and introduced a workflow to helps with issues in future. Phishtank support has now also been added.")
-    print(" Paralax for fixing typos in the readme")
-    print(" MrMeeseeks2014 fox fixing a bug relating to hash uploads")
-    extrasMenu()
-
-def extrasVersion():
-    print(' Current Version: ' + versionNo)
-    extrasMenu()
-
-def wikiLink():
-    print('\n The Sooty Wiki can be found at the following link:')
-    print(' https://github.com/TheresAFewConors/Sooty/wiki')
-    extrasMenu()
-
-def ghLink():
-    print('\n The Sooty Repo can be found at the following link:')
-    print(' https://github.com/TheresAFewConors/Sooty')
-    extrasMenu()
-
 # adding passive DNS history in VirusTotal
 
 def dnsHistory():
@@ -1090,5 +1019,4 @@ def dnsHistory():
         print('Host name: {}'.format(host['attributes']['host_name']))
 
 if __name__ == '__main__':
-    #titleLogo()
     mainMenu()
